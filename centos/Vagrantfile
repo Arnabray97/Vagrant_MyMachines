@@ -1,0 +1,55 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    # Box for CentOS Stream (replace with appropriate box name for your desired version)
+    # You can find available boxes on Vagrant Cloud: https://app.vagrantup.com/boxes/search
+    # For CentOS Stream 9:
+    # config.vm.box = "centos/stream9"
+    # For CentOS Stream 8:
+    config.vm.box = "centos/stream8"  # Or "centos/stream9" if you prefer the latest.
+    # For a specific version (e.g., CentOS Stream 9 latest):
+    # config.vm.box = "centos/stream9"
+    # config.vm.box_version = ">= 20231026" # Example date, adjust as needed.
+  
+    #config.vm.box_allow_insecure = true # Only needed if you have issues with box verification.  Generally avoid unless you have a specific reason.
+  
+    config.vm.hostname = "centos-stream-vm" # Set the hostname of the VM
+  
+    # Networking (choose one of the options below)
+    # 1. Bridged networking (connects the VM directly to your network)
+    # config.vm.network "bridged"
+  
+    # 2. Host-only networking (creates a private network between the host and the VM)
+    config.vm.network "private_network", ip: "192.168.56.14" # Example IP address
+
+    # Create a public network, which generally matched to bridged network.
+    # Bridged networks make the machine appear as another physical device on
+    # your network.
+    config.vm.network "public_network"
+  
+    # 3. NAT networking (default; the VM can access the internet, but is not directly accessible from the host)
+    # No explicit configuration needed for NAT as it's the default.  Port forwarding is common with NAT.  Example:
+    # config.vm.network "forwarded_port", guest: 80, host: 8080 # Forward port 80 in the VM to 8080 on the host
+  
+    # Synced folders (share files between the host and the VM)
+    #config.vm.synced_folder ".", "/vagrant", :type => "rsync" # Share the current directory with /vagrant in the VM.  Rsync is recommended for performance.
+  
+    # Provisioning (run commands or scripts inside the VM after it's started)
+    # Example: Install updates and some packages
+    # config.vm.provision "shell", inline: <<-SHELL
+    #   yum update -y
+    #   yum install -y nano vim wget curl net-tools
+    # SHELL
+  
+    # Customize resources (memory, CPU)
+    config.vm.provider "virtualbox" do |vb|
+      vb.memory = "2048" # 2GB of RAM
+      vb.cpus = 2       # 2 CPUs
+    end
+  
+    # Optional: Customize the GUI
+    # config.vm.provider "virtualbox" do |vb|
+    #   vb.gui = true
+    # end
+  end
